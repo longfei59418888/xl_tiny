@@ -1,0 +1,19 @@
+{
+  "name": "xl_tiny",
+  "version": "1.0.1",
+  "description": "tinypng本地直接压缩",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "bin": "./bin/index.js",
+  "author": "xiaolong",
+  "license": "ISC",
+  "dependencies": {
+    "chalk": "^2.4.2",
+    "commander": "^2.20.0",
+    "shelljs": "^0.8.3",
+    "tinify": "^1.6.0-beta.2",
+    "yargs": "^13.2.2"
+  }
+}
