@@ -6,16 +6,16 @@ var argv = require('yargs').argv
 var shell = require('shelljs')
 
 const fileExt = ['.png', '.jpg']
-module.exports = async (file) => {
+module.exports = async (file, type) => {
     const keyPath = path.join(__dirname, './key')
     let key = fs.readFileSync(keyPath, 'utf8');
-    if(key.length<1){
+    if (key.length < 1) {
         console.log(chalk.red(`must set key , you can get it from https://tinypng.com/dashboard/api`));
         process.exit(0)
         return
     }
     tinify.key = key;
-    let filePath = path.join(process.cwd(), file);
+    let filePath = type ? file : path.join(process.cwd(), file);
     let distPath = argv.o ? path.join(process.cwd(), argv.o) : filePath;
     if (!fs.existsSync(filePath)) {
         console.log(chalk.red(` no such file or directory ：${filePath}`));
@@ -24,7 +24,7 @@ module.exports = async (file) => {
     }
     var statInfo = fs.statSync(filePath);
     if (!statInfo.isFile()) {
-        console.log(chalk.red(` is not a file ：${filePath}`  ));
+        console.log(chalk.red(` is not a file ：${filePath}`));
         process.exit(0)
         return
     }
@@ -42,8 +42,8 @@ module.exports = async (file) => {
     }
     console.log(chalk.yellow(` 开始压缩 ：${filePath}`));
     const source = tinify.fromFile(filePath);
-    if(!fs.existsSync(path.dirname(distPath))){
-        shell.mkdir('-p',path.dirname(distPath))
+    if (!fs.existsSync(path.dirname(distPath))) {
+        shell.mkdir('-p', path.dirname(distPath))
     }
     source.toFile(distPath, (res) => {
         if (res && res.message) {

@@ -8,8 +8,8 @@ var argv = require('yargs').argv
 var file = require('./file')
 
 const fileExt = ['.png', '.jpg']
-module.exports = async (dir) => {
-    let filePath = path.join(process.cwd(), dir);
+module.exports = async (dir, type) => {
+    let filePath = type ? dir : path.join(process.cwd(), dir);
     let distPath = argv.o ? path.join(process.cwd(), argv.o) : filePath;
     if (!fs.existsSync(filePath)) {
         console.log(chalk.red(` no such file or directory ：${filePath}`));
@@ -29,13 +29,14 @@ module.exports = async (dir) => {
     console.log(chalk.yellow(` 开始压缩 ：${filePath}`));
     let dealNum = fileList.length
     fileList.forEach(item => {
-        deal(item.replace(/\//g,'\\'))
+        deal(item.replace(/\//g, '\\'))
     })
+
     function deal(fileItem) {
         const source = tinify.fromFile(fileItem);
-        const dist = path.join(distPath,path.relative(filePath, fileItem))
-        if(!fs.existsSync(path.dirname(dist))){
-            shell.mkdir('-p',path.dirname(dist))
+        const dist = path.join(distPath, path.relative(filePath, fileItem))
+        if (!fs.existsSync(path.dirname(dist))) {
+            shell.mkdir('-p', path.dirname(dist))
         }
         source.toFile(dist, (err) => {
             dealNum = dealNum - 1
